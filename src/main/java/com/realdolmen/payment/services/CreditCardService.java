@@ -63,26 +63,25 @@ public class CreditCardService {
         CreditCard cc;
 
         try {
-            System.out.println(cardNumber);
             cc = entityManager
                     .createQuery("select c from credit_card c where c.cardNumber='" + cardNumber + "'", CreditCard.class)
                     .getSingleResult();
         } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            Response.ResponseBuilder builder = Response.ok();
             builder.entity("false\nCreditcard does not exist.");
             throw new WebApplicationException(builder.build());
         }
 
         if (!cc.getName().equals(name)) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            Response.ResponseBuilder builder = Response.ok();
             builder.entity("false\nName wrong.");
             throw new WebApplicationException(builder.build());
         } else if (!cc.getValidDate().equals(validDate)) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            Response.ResponseBuilder builder = Response.ok();
             builder.entity("false\nDate wrong.");
             throw new WebApplicationException(builder.build());
-        } else if (!cc.getCcv().equals(ccv)) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+        }else if (!cc.getCcv().equals(ccv)) {
+            Response.ResponseBuilder builder = Response.ok();
             builder.entity("false\nCcv wrong.");
             throw new WebApplicationException(builder.build());
         } else {
