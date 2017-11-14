@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Variant;
 import java.util.List;
 
 @Path("creditcard")
@@ -67,21 +68,21 @@ public class CreditCardService {
                     .createQuery("select c from credit_card c where c.cardNumber='" + cardNumber + "'", CreditCard.class)
                     .getSingleResult();
         } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.serverError();
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             builder.entity("false\nCreditcard does not exist.");
             throw new WebApplicationException(builder.build());
         }
 
         if (!cc.getName().equals(name)) {
-            Response.ResponseBuilder builder = Response.serverError();
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             builder.entity("false\nName wrong.");
             throw new WebApplicationException(builder.build());
         } else if (!cc.getValidDate().equals(validDate)) {
-            Response.ResponseBuilder builder = Response.serverError();
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             builder.entity("false\nDate wrong.");
             throw new WebApplicationException(builder.build());
-        }else if (!cc.getCcv().equals(ccv)) {
-            Response.ResponseBuilder builder = Response.serverError();
+        } else if (!cc.getCcv().equals(ccv)) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             builder.entity("false\nCcv wrong.");
             throw new WebApplicationException(builder.build());
         } else {
@@ -89,6 +90,7 @@ public class CreditCardService {
             builder.entity("true\nCredit card accepted.");
             return builder.build();
         }
+
     }
 
 }
